@@ -14,6 +14,6 @@ router.put("/update/statusall", drinkController.updateStatusAll);
 router.put("/update/:id", drinkController.updateDrink);
 router.delete("/delete/:id", drinkController.deleteDrink);
 
-router.get("/show/all", drinkController.getDrinkByIds);
+router.post("/show/all", drinkController.getDrinkByIds);
 
 module.exports = router;
