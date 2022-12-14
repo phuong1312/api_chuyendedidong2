@@ -3,9 +3,6 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 var bodyParser = require("body-parser");
 const morgan = require("morgan");
-const path = require("path");
-const fs = require("fs");
-const multer = require("multer");
 require("dotenv").config({ path: __dirname + "/.env" });
 
 const port = process.env.PORT;
@@ -16,9 +13,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(morgan("common"));
 app.use(cors());
+app.use(bodyParser.json({limit: "50mb"}));
+app.use(morgan('common'));
+
 // app.set("view engine", "ejs");
-
-
 //connect
 var dbConn = require("./config/config");
 mongoose.connection.once("open", () => {
@@ -50,12 +48,6 @@ app.use("/api/table", tableRoute);
 app.use("/api/drinkorder", drinkOrderRoute);
 app.use("/api/order", orderRoute);
 
-
-app.use(bodyParser.json({limit: "50mb"}));
-app.use(morgan('common'));
-// app.get('/', (req, res) => {
-//     res.status(200).json({msg: "ok"});
-// });
 app.get('/', authorization, (req, res) => {
     console.log(req.user);
     return res.json(req.user);
