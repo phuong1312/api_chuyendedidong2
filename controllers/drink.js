@@ -1,7 +1,7 @@
 const Drink = require("../models/drink");
 const Category = require("../models/category");
 const fs = require("fs");
-
+const mongoose = require("mongoose");
 const drinkController = {
   //add user
   addDrink: async (req, res) => {
@@ -170,6 +170,56 @@ const drinkController = {
         data: error,
       });
     }
+  },
+  updateStatus: async (req, res) => {
+    try {
+      const drink = Drink.findById(req.params.id);
+      await drink.updateOne({ $set: { status: req.body.status } });
+      res.status(200).json({
+        success: true,
+        message: "update successful status drink",
+        data: req.body.status,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        data: error,
+      });
+    }
+  },
+
+  updateStatusAll: async (req, res) => {
+    try {
+      const drink = Drink.find();
+      await drink.updateMany({ $set: { status: false } });
+      res.status(200).json({
+        success: true,
+        message: "updateAll successful status drink",
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        data: error,
+      });
+    }
+  },
+  getDrinkByIds: (req, res) => {
+    const ids = req.body.items.map(mongoose.Types.ObjectId);
+
+    Drink.find({
+      _id: {
+        $in: ids,
+      },
+    })
+      .then((result) => {
+        console.log("result: ", result);
+        res.json({
+          data: result,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   },
 };
 
