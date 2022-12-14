@@ -32,23 +32,23 @@ mongoose.connection.once("open", () => {
 });
 
 const userRoute = require("./routes/user");
-// const drinkRoute = require("./routes/drink");
-// const categoryRoute = require("./routes/category");
-// const roleRoute = require("./routes/role");
-// const areaRoute = require("./routes/area");
-// const tableRoute = require("./routes/table");
-// const drinkOrderRoute = require("./routes/drinkOrder");
-// const orderRoute = require("./routes/order");
+const drinkRoute = require("./routes/drink");
+const categoryRoute = require("./routes/category");
+const roleRoute = require("./routes/role");
+const areaRoute = require("./routes/area");
+const tableRoute = require("./routes/table");
+const drinkOrderRoute = require("./routes/drinkOrder");
+const orderRoute = require("./routes/order");
 const authorization = require('./config/authTokenRequired');
 
 app.use("/api/user", userRoute);
-// app.use("/api/role", roleRoute);
-// app.use("/api/drink", drinkRoute);
-// app.use("/api/category", categoryRoute);
-// app.use("/api/are", areaRoute);
-// app.use("/api/table", tableRoute);
-// app.use("/api/drink-order", drinkOrderRoute);
-// app.use("/api/order", orderRoute);
+app.use("/api/role", roleRoute);
+app.use("/api/drink", drinkRoute);
+app.use("/api/category", categoryRoute);
+app.use("/api/are", areaRoute);
+app.use("/api/table", tableRoute);
+app.use("/api/drinkorder", drinkOrderRoute);
+app.use("/api/order", orderRoute);
 
 
 app.use(bodyParser.json({limit: "50mb"}));
