@@ -31,7 +31,7 @@ mongoose.connection.once("open", () => {
   });
 });
 
-// const userRoute = require(path.join("./routes/user.js"));
+const userRoute = require("./routes/user");
 // const drinkRoute = require("./routes/drink");
 // const categoryRoute = require("./routes/category");
 // const roleRoute = require("./routes/role");
@@ -39,9 +39,9 @@ mongoose.connection.once("open", () => {
 // const tableRoute = require("./routes/table");
 // const drinkOrderRoute = require("./routes/drinkOrder");
 // const orderRoute = require("./routes/order");
-var authorization = require('./config/authTokenRequired');
-console.log(path.join(process.cwd(),'config'));
-// app.use("/api/user", userRoute);
+const authorization = require('./config/authTokenRequired');
+
+app.use("/api/user", userRoute);
 // app.use("/api/role", roleRoute);
 // app.use("/api/drink", drinkRoute);
 // app.use("/api/category", categoryRoute);
