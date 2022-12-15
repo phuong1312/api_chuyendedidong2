@@ -205,7 +205,7 @@ const drinkController = {
   },
   getDrinkByIds: async (req, res) => {
     try {
-      const ids = req.body.items.map(mongoose.Types.ObjectId);
+      const ids = req.body.id;
 
       const drinks = await Drink.find({
         _id: {
