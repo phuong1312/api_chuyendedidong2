@@ -203,23 +203,27 @@ const drinkController = {
       });
     }
   },
-  getDrinkByIds: (req, res) => {
-    const ids = req.body.items.map(mongoose.Types.ObjectId);
+  getDrinkByIds: async (req, res) => {
+    try {
+      const ids = req.body.id;
 
-    Drink.find({
-      _id: {
-        $in: ids,
-      },
-    })
-      .then((result) => {
-        console.log("result: ", result);
-        res.json({
-          data: result,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
+      const drinks = await Drink.find({
+        _id: {
+          $in: ids,
+        },
       });
+      console.log(drinks);
+      res.status(200).json({
+        success: true,
+        message: "get drink by ids successful ",
+        data: drinks,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        data: error,
+      });
+    }
   },
 };
 
