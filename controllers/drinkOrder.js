@@ -21,12 +21,13 @@ const drinkOrderController = {
   // },
   addDrinkOrder: async (req, res) => {
     try {
-      await DrinkOrder.insertMany(req.body);
+      const drink = await DrinkOrder.insertMany(req.body);
 
       //console.log("drink: " + newDrinkOrder);
       res.status(200).json({
         success: true,
         message: "add success drink order !",
+        data: drink,
       });
     } catch (error) {
       res.status(500).json({
