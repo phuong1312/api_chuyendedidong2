@@ -10,27 +10,26 @@ const userController = {
         try {
             console.log(req.body.user_name == "" && req.body.password == "" && req.body.full_name == "" && req.body.phone == "" && req.body.role == "");
             if (req.body.user_name == "" && req.body.password == "" && req.body.full_name == "" && req.body.phone == "" && req.body.role == "") {
-                return res.status(402).json({error:"Vui lòng điền đầy đủ thông tin"});
+                return res.status(402).json({ error: "Please complete all information" });
             }
             else if (req.body.user_name == "") {
-                return res.status(402).json({error:"Vui lòng điền Tên Tài Khoản"});
+                return res.status(402).json({ error: "Please enter your Account Name" });
             }
-            else if (req.body.password  == "") {
-                return res.status(402).json({error:"Vui lòng điền Password"});
+            else if (req.body.password == "") {
+                return res.status(402).json({ error: "Please enter Password" });
             }
             else if (req.body.full_name == "") {
-                return res.status(402).json({error:"Vui lòng điền Họ và Tên"});
+                return res.status(402).json({ error: "Please enter your first and last name" });
             }
             else if (req.body.phone == "") {
-                return res.status(402).json({error:"Vui lòng điền SĐT"});
+                return res.status(402).json({ error: "Please fill in your phone number" });
             }
             else if (req.body.role == "") {
-                return res.status(402).json({error:"Vui lòng chọn vai trò"});
+                return res.status(402).json({ error: "Please select a role" });
             } else {
                 const newUser = new User(req.body);
-                const saveUser = await newUser.save();
-                // const token = jwt.sign({ _id: newUser._id }, process.env.JWT_SECRET);
-                return res.status(200).send(saveUser);
+                const checkUser = await newUser.save();
+                return res.status(200).send(checkUser);
             }
         } catch (err) {
             return res.status(500).json(err);
@@ -62,9 +61,9 @@ const userController = {
             if (deleteUser) {
                 await Role.updateMany({ users: req.params.id }, { $pull: { users: req.params.id } });
             };
-            return res.status(200).send({"messenger" : "Delete User is Success!"});
+            return res.status(200).send({ "messenger": "Delete User is Success!" });
         } catch (err) {
-            return  res.status(500).json(err);
+            return res.status(500).json(err);
         };
     },
     //update user by id
@@ -91,39 +90,40 @@ const userController = {
     login: async (req, res) => {
         const { user_name, password } = req.body;
         if (user_name == "" && password == "") {
-            return res.status(402).json({ error: "Vui lòng điền đầy đủ User Name và Password" });
+            return res.status(402).json({ error: "Please fill in User Name and Password" });
         } else if (user_name == "") {
-            return res.status(402).json({ error: "Vui lòng điền đầy đủ User Name" });
+            return res.status(402).json({ error: "Please complete User Name" });
         } else if (password == "") {
-            return res.status(402).json({ error: "Vui lòng điền đầy đủ Password" });
+            return res.status(402).json({ error: "Please fill in the full Password" });
         } else {
-            const saveUser = await User.findOne({ user_name: user_name });
-            // console.log(saveUser);
-            if (!saveUser) {
-                return res.status(402).json({ error: "User Name Không Tồn Tại !" });
+            const checkUser = await User.findOne({ user_name: user_name });
+            if (!checkUser) {
+                return res.status(402).json({ error: "User Name Does Not Exist !" });
             }
             try {
-                bcrypt.compare(password, saveUser.password, (err, result) => {
+                bcrypt.compare(password, checkUser.password, (err, result) => {
                     if (result) {
                         console.log(result);
-                        const token = jwt.sign({ _id: saveUser._id }, process.env.JWT_SECRET);
-                        return res.status(200).json({ token });
+                        const token = jwt.sign({ _id: checkUser._id }, process.env.JWT_SECRET);
+                        return res.status(200).json(checkUser);
                     } else {
-                        // console.log("password does not match");
-                        return res.status(402).json({ error: "Sai Password" });
+                        return res.status(402).json({ error: "Wrong Password" });
                     }
                 });
             } catch (error) {
                 return res.status(402).json(error);
             }
         }
-        // console.log({user_name: user_name});
-
-    },  
-
-    logout: async (req, res) => {
-        console.log(req.body);
-    }
+    },
+    // //get user by name
+    // getUserById: async (req, res) => {
+    //     try {
+    //         const getUser = await User.findOne(req.bod.user_name);
+    //         return res.status(200).send(getUser);
+    //     } catch (err) {
+    //         return res.status(500).json(err);
+    //     };
+    // },
 };
 
 module.exports = userController;
