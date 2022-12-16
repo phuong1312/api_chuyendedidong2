@@ -1,7 +1,7 @@
 const Drink = require("../models/drink");
 const Category = require("../models/category");
 const fs = require("fs");
-
+const mongoose = require("mongoose");
 const drinkController = {
   //add user
   addDrink: async (req, res) => {
@@ -163,6 +163,60 @@ const drinkController = {
       res.status(200).json({
         success: true,
         message: "deleted successful drink",
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        data: error,
+      });
+    }
+  },
+  updateStatus: async (req, res) => {
+    try {
+      const drink = Drink.findById(req.params.id);
+      await drink.updateOne({ $set: { status: req.body.status } });
+      res.status(200).json({
+        success: true,
+        message: "update successful status drink",
+        data: req.body.status,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        data: error,
+      });
+    }
+  },
+
+  updateStatusAll: async (req, res) => {
+    try {
+      const drink = Drink.find();
+      await drink.updateMany({ $set: { status: false } });
+      res.status(200).json({
+        success: true,
+        message: "updateAll successful status drink",
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        data: error,
+      });
+    }
+  },
+  getDrinkByIds: async (req, res) => {
+    try {
+      const ids = req.body.id;
+
+      const drinks = await Drink.find({
+        _id: {
+          $in: ids,
+        },
+      });
+      console.log(drinks);
+      res.status(200).json({
+        success: true,
+        message: "get drink by ids successful ",
+        data: drinks,
       });
     } catch (error) {
       res.status(500).json({
