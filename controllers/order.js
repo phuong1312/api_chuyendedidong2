@@ -10,6 +10,7 @@ const orderController = {
       res.status(200).json({
         success: true,
         message: "add success drink order !",
+        data: savedOrder,
       });
     } catch (error) {
       res.status(500).json({
@@ -21,7 +22,7 @@ const orderController = {
   },
   getAllOrder: async (req, res) => {
     try {
-      const orders = await Order.find().populate('drinks');
+      const orders = await Order.find().populate("drinks");
       res.status(200).json({
         success: true,
         message: "read successful order",
