@@ -3,7 +3,7 @@ const Role = require("../models/role.js");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 // const { StreamDescription } = require("mongodb");
-var reFreshTokens = [];
+// var reFreshTokens = [];
 let format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
 const userController = {
     //add user
@@ -91,10 +91,7 @@ const userController = {
     },
 
     createToken: (checkUser) => {
-        return jwt.sign({ _id: checkUser._id }, process.env.JWT_SECRET, {expiresIn: 2400});
-    },
-    createFreshToken: (checkUser) => {
-        return jwt.sign({ _id: checkUser._id }, process.env.JWT_SECRET_FRESH, {expiresIn: "2d"});
+        return jwt.sign({ _id: checkUser._id }, process.env.JWT_SECRET, {expiresIn: "13d"});
     },
     //login user
     login: async (req, res) => {
@@ -116,16 +113,13 @@ const userController = {
                 bcrypt.compare(password, checkUser.password, (err, result) => {
                     if (result) {
                         const token = userController.createToken(checkUser);
-                        const refreshToken = userController.createFreshToken(checkUser);
-                        reFreshTokens.push(refreshToken);
-                        console.log(reFreshTokens);
-                        res.cookie("refreshToken" , refreshToken, {
+                        res.cookie("token" , token, {
                             httpOnly: true,
-                            secure: false,
+                            secure: true,
                             sameSite: "strict",
-                        })
+                        });
                         const {password, ...other} = checkUser._doc
-                        return res.status(200).json({token: token,data: {...other}});
+                        return res.status(200).json({...other});
                     } else {
                         return res.status(402).json({ error: "Wrong Password" });
                     }
@@ -134,32 +128,6 @@ const userController = {
                 return res.status(402).json(error);
             }
         }
-    },
-    //refresh token
-    refreshToken: async (req, res) => {
-        let refreshToken = req.cookies.refreshToken;
-        // console.log(refreshToken);
-        if (!refreshToken) {
-            return res.status(403).json({err: "You are not authenticated"});
-        }
-        if (!reFreshTokens.includes(refreshToken)) {
-            return res.status(403).json({err: "Refresh token is not valid"});
-        } 
-        jwt.verify(refreshToken, process.env.JWT_SECRET_FRESH, (err, user) => {
-            if (err) {
-                console.log(err);
-            }
-            refreshToken = reFreshTokens.filter((token) => token !== refreshToken);
-            const newFreshToken = userController.createFreshToken(user);
-            const newToken = userController.createToken(user);
-            reFreshTokens.push(newFreshToken);
-            res.cookie("refreshToken" , newFreshToken, {
-                httpOnly: true,
-                secure: false,
-                sameSite: "strict",
-            });
-            return res.status(200).json({token: newToken});
-        });
     },
     //get list sort user 
     getSortIncreaseOnName: async (req, res) => {
@@ -211,8 +179,7 @@ const userController = {
     },
     //logout
     logout: async (req,res) => {
-        res.clearCookie("refreshToken")
-        refreshToken = reFreshTokens.filter((token) => token !== req.cookies.refreshToken);
+        res.clearCookie("token");
         return res.status(200).json({msg: "logout is success"});
     }
 };

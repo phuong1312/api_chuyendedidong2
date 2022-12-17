@@ -23,5 +23,5 @@ router.get("/sortDecrease", userController.getSortDecreaseOnName);
 //get user by role id
 router.get("/role/:id", userController.getUserByRoleId);
 //refresh token
-router.post('/refresh', userController.refreshToken);
+// router.post('/refresh', userController.refreshToken);
 module.exports = router;

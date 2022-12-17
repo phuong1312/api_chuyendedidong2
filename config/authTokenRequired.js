@@ -5,7 +5,7 @@ const user = require('../models/user');
 require('dotenv').config();
 
 module.exports = (req, res, next) => {
-    const { authorization } = req.headers;
+    const authorization = req.cookies.token;
     if (!authorization) {
         return res.status(401).send({ error: "You must be logged in, key not given" });
     };
