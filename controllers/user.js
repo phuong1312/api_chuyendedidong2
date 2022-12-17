@@ -2,7 +2,7 @@ const User = require("../models/user.js");
 const Role = require("../models/role.js");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-
+var format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
 const userController = {
     //add user
     addUser: async (req, res) => {
@@ -95,6 +95,8 @@ const userController = {
             return res.status(402).json({ error: "Please complete User Name" });
         } else if (password == "") {
             return res.status(402).json({ error: "Please fill in the full Password" });
+        } else if (format.test(password) || format.test(user_name)) {
+            return res.status(402).json({ error: "user name and password contain special characters" });
         } else {
             const checkUser = await User.findOne({ user_name: user_name });
             if (!checkUser) {
@@ -115,15 +117,55 @@ const userController = {
             }
         }
     },
-    // //get user by name
-    // getUserById: async (req, res) => {
-    //     try {
-    //         const getUser = await User.findOne(req.bod.user_name);
-    //         return res.status(200).send(getUser);
-    //     } catch (err) {
-    //         return res.status(500).json(err);
-    //     };
-    // },
+    // 
+    getSortIncreaseOnName: async (req, res) => {
+        try {
+            const drinks = await User.find().collation({locale:'en',strength: 2}).sort({ user_name: 1 });
+            res.status(200).json({
+                success: true,
+                message: "read successful drinks sort increase on price",
+                data: drinks,
+            });
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                data: error,
+            });
+        }
+    },
+
+    getSortDecreaseOnName: async (req, res) => {
+        try {
+            const drinks = await User.find().collation({locale:'en',strength: 2}).sort({ user_name: -1 });
+            res.status(200).json({
+                success: true,
+                message: "read successful drinks sort decrease on price",
+                data: drinks,
+            });
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                data: error,
+            });
+        }
+    },
+    //get user by role
+    getUserByRoleId: async (req, res) => {
+        try {
+            //const category = await Category.findById(req.params.id);
+            const users = await User.find({ role: req.params.id });
+            res.status(200).json({
+                success: true,
+                message: "read successful drink",
+                data: users,
+            });
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                data: error,
+            });
+        }
+    },
 };
 
 module.exports = userController;

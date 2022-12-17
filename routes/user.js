@@ -16,4 +16,10 @@ router.get('/getbyid/:id', userController.getUserById);
 router.delete('/delete/:id', userController.deleteUser);
 //update user
 router.put('/update/:id', userController.updateUserById);
+//get list user sort increase
+router.get("/sortIncrease", userController.getSortIncreaseOnName);
+//get list user sort decrease
+router.get("/sortDecrease", userController.getSortDecreaseOnName);
+//get user by role id
+router.get("/role/:id", userController.getUserByRoleId);
 module.exports = router;
