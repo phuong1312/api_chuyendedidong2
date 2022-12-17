@@ -65,7 +65,7 @@ app.use("/api/user", userRoute);
 app.use("/api/role", roleRoute);
 app.use("/api/drink", drinkRoute);
 app.use("/api/category", categoryRoute);
-app.use("/api/are", areaRoute);
+app.use("/api/area", areaRoute);
 app.use("/api/table", tableRoute);
 app.use("/api/drinkorder", drinkOrderRoute);
 app.use("/api/order", orderRoute);
