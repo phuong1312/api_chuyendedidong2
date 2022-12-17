@@ -5,6 +5,10 @@ const drinkOrderSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Drink",
     },
+    table: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Table",
+    },
     qty: {
       type: Number,
     },
