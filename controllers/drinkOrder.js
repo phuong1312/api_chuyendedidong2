@@ -56,6 +56,25 @@ const drinkOrderController = {
     }
   },
 
+  getAllDrinkOrderDecrease: async (req, res) => {
+    try {
+      const drinks = await DrinkOrder.find()
+        .sort({ createdAt: -1 })
+        .populate("drink")
+        .populate("table");
+      res.status(200).json({
+        success: true,
+        message: "read successful drinks",
+        data: drinks,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        data: error.message,
+      });
+    }
+  },
+
   updateDrinkOrder: async (req, res) => {
     try {
       const order = await DrinkOrder.findById(req.params.id);
