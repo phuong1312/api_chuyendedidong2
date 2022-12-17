@@ -40,7 +40,9 @@ const drinkOrderController = {
 
   getAllDrinkOrder: async (req, res) => {
     try {
-      const drinks = await DrinkOrder.find().populate("drink");
+      const drinks = await DrinkOrder.find()
+        .populate("drink")
+        .populate("table");
       res.status(200).json({
         success: true,
         message: "read successful drinks",
