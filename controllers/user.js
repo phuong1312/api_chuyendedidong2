@@ -2,7 +2,9 @@ const User = require("../models/user.js");
 const Role = require("../models/role.js");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-var format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+// const { StreamDescription } = require("mongodb");
+var reFreshTokens = [];
+let format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
 const userController = {
     //add user
     addUser: async (req, res) => {
@@ -70,21 +72,29 @@ const userController = {
     updateUserById: async (req, res) => {
         try {
             const userFind = await User.findOne({ user_name: req.body.user_name });
-            // console.log(req.body.password);
-            // console.log(req.body.password == userFind.password);
+            // let testUser;
             if (bcrypt.compareSync(req.body.password, userFind.password) == false && req.body.password != userFind.password) {
                 req.body.password = await bcrypt.hash(req.body.password, 8);
                 const allUser = await User.findByIdAndUpdate(req.params.id, req.body);
+                // testUser = await User.findByIdAndUpdate(req.params.id, req.body);
                 console.log("ok");
             } else {
                 req.body.password = userFind.password;
                 const allUser = await User.findByIdAndUpdate(req.params.id, req.body);
-                console.log("okla");
+                // testUser = await User.findByIdAndUpdate(req.params.id, req.body);
+                // console.log("okla");
             }
-            return res.status(200).send("Update user is success!!");
+            return res.status(200).send({msg:"Update user is success!!"});
         } catch (err) {
             return res.status(500).json(err);
         };
+    },
+
+    createToken: (checkUser) => {
+        return jwt.sign({ _id: checkUser._id }, process.env.JWT_SECRET, {expiresIn: 2400});
+    },
+    createFreshToken: (checkUser) => {
+        return jwt.sign({ _id: checkUser._id }, process.env.JWT_SECRET_FRESH, {expiresIn: "2d"});
     },
     //login user
     login: async (req, res) => {
@@ -105,9 +115,17 @@ const userController = {
             try {
                 bcrypt.compare(password, checkUser.password, (err, result) => {
                     if (result) {
-                        console.log(result);
-                        const token = jwt.sign({ _id: checkUser._id }, process.env.JWT_SECRET);
-                        return res.status(200).json(checkUser);
+                        const token = userController.createToken(checkUser);
+                        const refreshToken = userController.createFreshToken(checkUser);
+                        reFreshTokens.push(refreshToken);
+                        console.log(reFreshTokens);
+                        res.cookie("refreshToken" , refreshToken, {
+                            httpOnly: true,
+                            secure: false,
+                            sameSite: "strict",
+                        })
+                        const {password, ...other} = checkUser._doc
+                        return res.status(200).json({token: token,data: {...other}});
                     } else {
                         return res.status(402).json({ error: "Wrong Password" });
                     }
@@ -117,7 +135,33 @@ const userController = {
             }
         }
     },
-    // 
+    //refresh token
+    refreshToken: async (req, res) => {
+        let refreshToken = req.cookies.refreshToken;
+        // console.log(refreshToken);
+        if (!refreshToken) {
+            return res.status(403).json({err: "You are not authenticated"});
+        }
+        if (!reFreshTokens.includes(refreshToken)) {
+            return res.status(403).json({err: "Refresh token is not valid"});
+        } 
+        jwt.verify(refreshToken, process.env.JWT_SECRET_FRESH, (err, user) => {
+            if (err) {
+                console.log(err);
+            }
+            refreshToken = reFreshTokens.filter((token) => token !== refreshToken);
+            const newFreshToken = userController.createFreshToken(user);
+            const newToken = userController.createToken(user);
+            reFreshTokens.push(newFreshToken);
+            res.cookie("refreshToken" , newFreshToken, {
+                httpOnly: true,
+                secure: false,
+                sameSite: "strict",
+            });
+            return res.status(200).json({token: newToken});
+        });
+    },
+    //get list sort user 
     getSortIncreaseOnName: async (req, res) => {
         try {
             const drinks = await User.find().collation({locale:'en',strength: 2}).sort({ user_name: 1 });
@@ -133,7 +177,6 @@ const userController = {
             });
         }
     },
-
     getSortDecreaseOnName: async (req, res) => {
         try {
             const drinks = await User.find().collation({locale:'en',strength: 2}).sort({ user_name: -1 });
@@ -166,6 +209,12 @@ const userController = {
             });
         }
     },
+    //logout
+    logout: async (req,res) => {
+        res.clearCookie("refreshToken")
+        refreshToken = reFreshTokens.filter((token) => token !== req.cookies.refreshToken);
+        return res.status(200).json({msg: "logout is success"});
+    }
 };
 
 module.exports = userController;

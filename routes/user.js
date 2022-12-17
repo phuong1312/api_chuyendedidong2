@@ -1,11 +1,11 @@
 const userController = require("../controllers/user");
-
+const authTokenRequired = require("../config/authTokenRequired");
 const router = require('express').Router();
 
 //login user
 router.post('/login', userController.login);
-//logout user
-// router.post('/logout', userController.logout);
+// //logout user
+router.delete('/logout', authTokenRequired,userController.logout);
 //add user
 router.post('/add', userController.addUser);
 //get all user
@@ -22,4 +22,6 @@ router.get("/sortIncrease", userController.getSortIncreaseOnName);
 router.get("/sortDecrease", userController.getSortDecreaseOnName);
 //get user by role id
 router.get("/role/:id", userController.getUserByRoleId);
+//refresh token
+router.post('/refresh', userController.refreshToken);
 module.exports = router;
