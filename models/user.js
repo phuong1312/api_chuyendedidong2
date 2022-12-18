@@ -1,7 +1,6 @@
 const { Timestamp } = require('mongodb');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-// const Role = require("./Role");
 
 const userSchema = new mongoose.Schema({
     user_name: {

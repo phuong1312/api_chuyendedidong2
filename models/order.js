@@ -11,6 +11,9 @@ const orderSchema = new mongoose.Schema(
         ref: "DrinkOrder",
       },
     ],
+    total_price: {
+      type: Number,
+    },
     status: {
       type: Boolean,
       default: true,

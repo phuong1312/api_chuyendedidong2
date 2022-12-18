@@ -7,6 +7,6 @@ router.post('/add', roleController.addRole);
 //get all role
 router.get('/all', roleController.getAllRole);
 //get role by name
-router.get('/rolebyname', roleController.getRoleByName);
+router.get('/rolebyname/:id', roleController.getRoleByName);
 
 module.exports = router;

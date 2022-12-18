@@ -2,15 +2,12 @@ const User = require("../models/user.js");
 const Role = require("../models/role.js");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-// const { StreamDescription } = require("mongodb");
-// var reFreshTokens = [];
 let format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
 const userController = {
     //add user
     addUser: async (req, res) => {
         // console.log(req.body);
         try {
-            console.log(req.body.user_name == "" && req.body.password == "" && req.body.full_name == "" && req.body.phone == "" && req.body.role == "");
             if (req.body.user_name == "" && req.body.password == "" && req.body.full_name == "" && req.body.phone == "" && req.body.role == "") {
                 return res.status(402).json({ error: "Please complete all information" });
             }
