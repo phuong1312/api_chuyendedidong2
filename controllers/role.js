@@ -24,8 +24,9 @@ const roleController = {
     //get role by id
     getRoleByName: async (req, res) => {
         try {
-            const role = await Role.findOne({role_name: "Admin"});
-            return res.status(200).json(role);
+            const role = await Role.findOne({_id: req.params.id});
+            const {_id, ...other} = role._doc;
+            return res.status(200).json({...other});
             // console.log(getAllUser);
         } catch (err) {
             return res.status(500).json(err);
