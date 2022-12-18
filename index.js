@@ -72,7 +72,6 @@ app.use("/api/drinkorder", drinkOrderRoute);
 app.use("/api/order", orderRoute);
 
 app.get("/", authorization, (req, res) => {
-  console.log(req.user);
   return res.json(req.user);
 });
 module.exports = app;
