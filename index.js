@@ -37,14 +37,16 @@ mongoose.connection.once("open", () => {
 socketIo.on("connection", (socket) => {
   console.log("có người đang kết nối: " + socket.id);
 
-  // socket.on("client-up-color", (data) => {
-  //   console.log("Sever nhận color từ client: " + data);
-  //   socketIo.sockets.emit("sever-up-color", data);
-  // });
+  
 
   socket.on("client up data drink order", () => {
     console.log("Sever nhận data drink order từ client: ");
     socketIo.sockets.emit("sever up data drink order");
+  });
+
+  socket.on("client change data status table", () => {
+    console.log("Sever nhận data table status từ client: ");
+    socketIo.sockets.emit("sever up data table status");
   });
 
   socket.on("disconnect", () => {
