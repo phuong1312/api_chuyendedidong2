@@ -37,8 +37,6 @@ mongoose.connection.once("open", () => {
 socketIo.on("connection", (socket) => {
   console.log("có người đang kết nối: " + socket.id);
 
-  
-
   socket.on("client up data drink order", () => {
     console.log("Sever nhận data drink order từ client: ");
     socketIo.sockets.emit("sever up data drink order");
@@ -50,7 +48,7 @@ socketIo.on("connection", (socket) => {
   });
   socket.on("client up data success drink order", () => {
     console.log("Sever nhận data drink order từ client: ");
-    socketIo.sockets.emit("sever up data drink order");
+    socketIo.sockets.emit("sever up data success drink order to client");
   });
 
   socket.on("disconnect", () => {
