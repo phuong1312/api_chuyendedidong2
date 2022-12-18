@@ -68,6 +68,7 @@ const areaRoute = require("./routes/area");
 const tableRoute = require("./routes/table");
 const drinkOrderRoute = require("./routes/drinkOrder");
 const orderRoute = require("./routes/order");
+const billRoute = require("./routes/bill");
 const authorization = require("./config/authTokenRequired");
 
 app.use("/api/user", userRoute);
@@ -78,6 +79,7 @@ app.use("/api/area", areaRoute);
 app.use("/api/table", tableRoute);
 app.use("/api/drinkorder", drinkOrderRoute);
 app.use("/api/order", orderRoute);
+app.use("/api/bill", billRoute);
 
 app.get("/", authorization, (req, res) => {
   return res.json(req.user);
