@@ -16,7 +16,7 @@ const drinkOrderSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    delivered: {
+    arrive: {
       type: Boolean,
       default: false,
     },

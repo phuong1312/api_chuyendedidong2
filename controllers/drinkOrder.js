@@ -93,6 +93,38 @@ const drinkOrderController = {
       });
     }
   },
+  updateStatus: async (req, res) => {
+    try {
+      const drink = DrinkOrder.findById(req.params.id);
+      await drink.updateOne({ $set: { status: req.body.status } });
+      res.status(200).json({
+        success: true,
+        message: "update successful status drink order",
+        data: req.body.status,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        data: error,
+      });
+    }
+  },
+  updateArrive: async (req, res) => {
+    try {
+      const drink = DrinkOrder.findById(req.params.id);
+      await drink.updateOne({ $set: { arrive: req.body.arrive } });
+      res.status(200).json({
+        success: true,
+        message: "update successful status drink order",
+        data: req.body.arrive,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        data: error,
+      });
+    }
+  },
 };
 
 module.exports = drinkOrderController;
