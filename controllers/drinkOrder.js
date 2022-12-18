@@ -1,24 +1,6 @@
 const DrinkOrder = require("../models/drinkOrder");
 
 const drinkOrderController = {
-  // addDrinkOrder: async (req, res) => {
-  //   try {
-  //     const newDrinkOrder = new DrinkOrder(req.body);
-  //     const savedDrinkOrder = await newDrinkOrder.save();
-
-  //     console.log("drink: " + newDrinkOrder);
-  //     res.status(200).json({
-  //       success: true,
-  //       message: "add success drink order !",
-  //     });
-  //   } catch (error) {
-  //     res.status(500).json({
-  //       success: false,
-  //       message: "add fail drink order !",
-  //       error: error.message,
-  //     });
-  //   }
-  // },
   addDrinkOrder: async (req, res) => {
     try {
       const drink = await DrinkOrder.insertMany(req.body);

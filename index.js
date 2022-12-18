@@ -3,11 +3,12 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 var bodyParser = require("body-parser");
 const morgan = require("morgan");
-
+const cookieParser = require("cookie-parser");
 require("dotenv").config({ path: __dirname + "/.env" });
 
 const port = process.env.PORT;
 const app = express();
+app.use(cookieParser());
 const http = require("http");
 const server = http.createServer(app);
 const socketIo = require("socket.io")(server);
@@ -65,13 +66,12 @@ app.use("/api/user", userRoute);
 app.use("/api/role", roleRoute);
 app.use("/api/drink", drinkRoute);
 app.use("/api/category", categoryRoute);
-app.use("/api/are", areaRoute);
+app.use("/api/area", areaRoute);
 app.use("/api/table", tableRoute);
 app.use("/api/drinkorder", drinkOrderRoute);
 app.use("/api/order", orderRoute);
 
 app.get("/", authorization, (req, res) => {
-  console.log(req.user);
   return res.json(req.user);
 });
 module.exports = app;

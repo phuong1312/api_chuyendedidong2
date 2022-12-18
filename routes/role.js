@@ -3,8 +3,10 @@ const roleController = require("../controllers/role");
 const router = require('express').Router();
 
 //add role
-router.post('/', roleController.addRole);
+router.post('/add', roleController.addRole);
 //get all role
 router.get('/all', roleController.getAllRole);
+//get role by name
+router.get('/rolebyname/:role_name', roleController.getRoleByName);
 
 module.exports = router;

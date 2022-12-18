@@ -21,6 +21,16 @@ const roleController = {
             return res.status(500).json(err);
         };
     },
+    //get role by id
+    getRoleByName: async (req, res) => {
+        try {
+            const role = await Role.findOne({role_name: "Admin"});
+            return res.status(200).json(role);
+            // console.log(getAllUser);
+        } catch (err) {
+            return res.status(500).json(err);
+        };
+    },
 };
 
 module.exports = roleController;
