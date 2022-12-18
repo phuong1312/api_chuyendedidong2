@@ -48,6 +48,10 @@ socketIo.on("connection", (socket) => {
     console.log("Sever nhận data table status từ client: ");
     socketIo.sockets.emit("sever up data table status");
   });
+  socket.on("client up data success drink order", () => {
+    console.log("Sever nhận data drink order từ client: ");
+    socketIo.sockets.emit("sever up data drink order");
+  });
 
   socket.on("disconnect", () => {
     console.log("Client disconnected: ", socket.id);
