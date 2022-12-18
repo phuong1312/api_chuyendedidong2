@@ -77,6 +77,23 @@ const tableController = {
       });
     }
   },
+
+  updateStatus: async (req, res) => {
+    try {
+      const table = Table.findById(req.params.id);
+      await table.updateOne({ $set: { status: req.body.status } });
+      res.status(200).json({
+        success: true,
+        message: "update successful status table",
+        data: req.body.status,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        data: error,
+      });
+    }
+  },
 };
 
 module.exports = tableController;
