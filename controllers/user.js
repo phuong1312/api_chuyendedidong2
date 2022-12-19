@@ -25,9 +25,6 @@ const userController = {
             }
             else if (req.body.role == "") {
                 return res.status(402).json({ error: "Please select a role" });
-            } 
-            else if (format.test(password) || format.test(user_name) || format.test(full_name)) {
-                return res.status(402).json({ error: "user name and password contain special characters" });
             } else {
                 const newUser = new User(req.body);
                 const checkUser = await newUser.save();
@@ -78,8 +75,6 @@ const userController = {
                 const allUser = await User.findByIdAndUpdate(req.params.id, req.body);
                 // testUser = await User.findByIdAndUpdate(req.params.id, req.body);
                 console.log("ok");
-            } else if (format.test(password) || format.test(user_name) || format.test(full_name)) {
-                return res.status(402).json({ error: "user name and password contain special characters" });
             } else {
                 req.body.password = userFind.password;
                 const allUser = await User.findByIdAndUpdate(req.params.id, req.body);
