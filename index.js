@@ -38,21 +38,25 @@ socketIo.on("connection", (socket) => {
   console.log("có người đang kết nối: " + socket.id);
 
   socket.on("client up data drink order", () => {
-    console.log("Sever nhận data drink order từ client: ");
+    console.log("Sever nhận data từ client: ");
     socketIo.sockets.emit("sever up data drink order");
   });
 
   socket.on("client change data status table", () => {
-    console.log("Sever nhận data table status từ client: ");
+    console.log("Sever nhận data từ client: ");
     socketIo.sockets.emit("sever up data table status");
   });
   socket.on("client up data success drink order", () => {
-    console.log("Sever nhận data drink order từ client: ");
+    console.log("Sever nhận data từ client: ");
     socketIo.sockets.emit("sever up data success drink order to client");
   });
   socket.on("client up data arrive drink order", () => {
-    console.log("Sever nhận data drink order từ client: ");
+    console.log("Sever nhận data từ client: ");
     socketIo.sockets.emit("sever up data success arrive drink order to client");
+  });
+  socket.on("client up data bill", () => {
+    console.log("Sever nhận data từ client: ");
+    socketIo.sockets.emit("sever up data bill to client");
   });
 
   socket.on("disconnect", () => {
