@@ -81,6 +81,7 @@ const userController = {
             //     // return res.status(200).send({msg:"Update user is success!!"});
             //     return res.status(200).send({msg:"Update user is success!!"});
             // }
+            console.log(req.body);
             const allUser = await User.findByIdAndUpdate(req.params.id, req.body);
             return res.status(200).json({msg:"Update user is success!!"});
         } catch (err) {
