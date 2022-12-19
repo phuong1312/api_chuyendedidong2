@@ -22,7 +22,7 @@ const roleController = {
         };
     },
     //get role by id
-    getRoleByName: async (req, res) => {
+    getRoleById: async (req, res) => {
         try {
             const role = await Role.findOne({_id: req.params.id});
             const {_id, ...other} = role._doc;

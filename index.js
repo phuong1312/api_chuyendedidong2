@@ -22,6 +22,7 @@ app.use(bodyParser.json({ limit: "50mb" }));
 app.use(morgan("common"));
 
 // app.set("view engine", "ejs");
+
 //connect
 var dbConn = require("./config/config");
 mongoose.connection.once("open", () => {
@@ -33,7 +34,6 @@ mongoose.connection.once("open", () => {
     }, 300000);
   });
 });
-
 socketIo.on("connection", (socket) => {
   console.log("có người đang kết nối: " + socket.id);
 
@@ -51,7 +51,8 @@ socketIo.on("connection", (socket) => {
     console.log("Client disconnected: ", socket.id);
   });
 });
-
+const shiftsRouter = require("./routes/shifts");
+const shiftOfUserRouter = require("./routes/shiftOfUser");
 const userRoute = require("./routes/user");
 const drinkRoute = require("./routes/drink");
 const categoryRoute = require("./routes/category");
@@ -62,6 +63,8 @@ const drinkOrderRoute = require("./routes/drinkOrder");
 const orderRoute = require("./routes/order");
 const authorization = require("./config/authTokenRequired");
 
+app.use("/api/shifts", shiftsRouter);
+app.use("/api/shiftofuser", shiftOfUserRouter);
 app.use("/api/user", userRoute);
 app.use("/api/role", roleRoute);
 app.use("/api/drink", drinkRoute);
@@ -74,4 +77,5 @@ app.use("/api/order", orderRoute);
 app.get("/", authorization, (req, res) => {
   return res.json(req.user);
 });
+
 module.exports = app;

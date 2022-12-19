@@ -6,7 +6,7 @@ const router = require('express').Router();
 router.post('/add', roleController.addRole);
 //get all role
 router.get('/all', roleController.getAllRole);
-//get role by name
-router.get('/rolebyname/:id', roleController.getRoleByName);
+//get role by id
+router.get('/rolebyname/:id', roleController.getRoleById);
 
 module.exports = router;
