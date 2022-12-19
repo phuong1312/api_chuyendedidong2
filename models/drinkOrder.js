@@ -12,6 +12,14 @@ const drinkOrderSchema = new mongoose.Schema(
     qty: {
       type: Number,
     },
+    status: {
+      type: Boolean,
+      default: false,
+    },
+    arrive: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   { timestamps: true }

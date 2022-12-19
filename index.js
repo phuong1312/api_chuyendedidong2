@@ -37,14 +37,26 @@ mongoose.connection.once("open", () => {
 socketIo.on("connection", (socket) => {
   console.log("có người đang kết nối: " + socket.id);
 
-  // socket.on("client-up-color", (data) => {
-  //   console.log("Sever nhận color từ client: " + data);
-  //   socketIo.sockets.emit("sever-up-color", data);
-  // });
-
   socket.on("client up data drink order", () => {
-    console.log("Sever nhận data drink order từ client: ");
+    console.log("Sever nhận data từ client: ");
     socketIo.sockets.emit("sever up data drink order");
+  });
+
+  socket.on("client change data status table", () => {
+    console.log("Sever nhận data từ client: ");
+    socketIo.sockets.emit("sever up data table status");
+  });
+  socket.on("client up data success drink order", () => {
+    console.log("Sever nhận data từ client: ");
+    socketIo.sockets.emit("sever up data success drink order to client");
+  });
+  socket.on("client up data arrive drink order", () => {
+    console.log("Sever nhận data từ client: ");
+    socketIo.sockets.emit("sever up data success arrive drink order to client");
+  });
+  socket.on("client up data bill", () => {
+    console.log("Sever nhận data từ client: ");
+    socketIo.sockets.emit("sever up data bill to client");
   });
 
   socket.on("disconnect", () => {
@@ -61,6 +73,7 @@ const areaRoute = require("./routes/area");
 const tableRoute = require("./routes/table");
 const drinkOrderRoute = require("./routes/drinkOrder");
 const orderRoute = require("./routes/order");
+const billRoute = require("./routes/bill");
 const authorization = require("./config/authTokenRequired");
 
 app.use("/api/shifts", shiftsRouter);
@@ -73,6 +86,7 @@ app.use("/api/area", areaRoute);
 app.use("/api/table", tableRoute);
 app.use("/api/drinkorder", drinkOrderRoute);
 app.use("/api/order", orderRoute);
+app.use("/api/bill", billRoute);
 
 app.get("/", authorization, (req, res) => {
   return res.json(req.user);

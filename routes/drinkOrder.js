@@ -9,6 +9,8 @@ router.get(
   drinkOrderController.getAllDrinkOrderDecrease
 );
 router.put("/update/:id", drinkOrderController.updateDrinkOrder);
+router.put("/update/status/:id", drinkOrderController.updateStatus);
+router.put("/update/arrive/:id", drinkOrderController.updateArrive);
 router.delete("/delete/:id", drinkOrderController.deleteDrinkOrder);
 
 module.exports = router;

@@ -22,7 +22,7 @@ const orderController = {
   },
   getAllOrder: async (req, res) => {
     try {
-      const orders = await Order.find().populate("drinks");
+      const orders = await Order.find().populate("drinks").populate("table");
       res.status(200).json({
         success: true,
         message: "read successful order",
