@@ -68,22 +68,19 @@ const userController = {
     //update user by id
     updateUserById: async (req, res) => {
         try {
-            // const userFind = await User.findOne({ user_name: req.body.user_name });
-            // if (bcrypt.compareSync(req.body.password, userFind.password) == false && req.body.password != userFind.password) {
-            //     req.body.password = await bcrypt.hash(req.body.password, 8);
-            //     const allUser = await User.findByIdAndUpdate(req.params.id, req.body);
-            //     return res.status(200).send({msg:"Update user is success!!"});
-            //     console.log("ok");
-            // } else {
-            //     req.body.password = userFind.password;
-            //     const allUser = await User.findByIdAndUpdate(req.params.id, req.body);
-            //     console.log("okla");
-            //     // return res.status(200).send({msg:"Update user is success!!"});
-            //     return res.status(200).send({msg:"Update user is success!!"});
-            // }
-            console.log(req.body);
-            const allUser = await User.findByIdAndUpdate(req.params.id, req.body);
-            return res.status(200).json({msg:"Update user is success!!"});
+            const userFind = await User.findOne({ user_name: req.body.user_name });
+            if (bcrypt.compareSync(req.body.password, userFind.password) == false && req.body.password != userFind.password) {
+                req.body.password = await bcrypt.hash(req.body.password, 8);
+                const allUser = await User.findByIdAndUpdate(req.params.id, req.body);
+                return res.status(200).send({msg:"Update user is success!!"});
+                console.log("ok");
+            } else {
+                req.body.password = userFind.password;
+                const allUser = await User.findByIdAndUpdate(req.params.id, req.body);
+                console.log("okla");
+                // return res.status(200).send({msg:"Update user is success!!"});
+                return res.status(200).send({msg:"Update user is success!!"});
+            }
         } catch (err) {
             return res.status(500).json(err);
         };
