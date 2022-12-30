@@ -176,8 +176,8 @@ const userController = {
                         console.log(token);
                         res.cookie("token", token, {
                             httpOnly: true,
-                            // secure: true,
-                            secure: false,
+                            secure: true,
+                            // secure: false,
                             sameSite: "strict",
                         });
                         const { password, ...other } = checkUser._doc
