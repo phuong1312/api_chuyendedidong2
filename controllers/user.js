@@ -31,9 +31,6 @@ const userController = {
             }
             else if (format.test(req.body.password)) {
                 return res.status(402).json({ error: "password contain special characters" });
-            }
-            else if (format.test(req.body.full_name)) {
-                return res.status(402).json({ error: "full name contain special characters" });
             } else {
                 const newUser = new User(req.body);
                 const checkUser = await newUser.save();
@@ -105,15 +102,6 @@ const userController = {
             }
             else if (req.body.role == "") {
                 return res.status(402).json({ error: "Please select a role" });
-            }
-            else if (format.test(req.body.user_name)) {
-                return res.status(402).json({ error: "user name contain special characters" });
-            }
-            else if (format.test(req.body.password)) {
-                return res.status(402).json({ error: "password contain special characters" });
-            }
-            else if (format.test(req.body.full_name)) {
-                return res.status(402).json({ error: "full name contain special characters" });
             } else {
                 const allUser = await User.findByIdAndUpdate(req.params.id, req.body);
                 return res.status(200).send({ msg: "Update user is success!!" });
