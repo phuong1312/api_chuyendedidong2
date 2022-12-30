@@ -176,8 +176,8 @@ const userController = {
                         console.log(token);
                         res.cookie("token", token, {
                             httpOnly: true,
-                            secure: true,
-                            // secure: false,
+                            // secure: true,
+                            secure: false,
                             sameSite: "strict",
                         });
                         const { password, ...other } = checkUser._doc
@@ -252,6 +252,7 @@ const userController = {
     //check token
     checkToken: async (req, res) => {
         try {
+            console.log(req.params.token);
             if (!req.params.token) {
                 return res.status(401).send({ error: "You must be logged in, key not given" });
             };
