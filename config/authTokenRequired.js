@@ -14,7 +14,7 @@ module.exports = (req, res, next) => {
         if (err) {
             return res.status(401).send({ error: "You must be logged in, token invalid" });
         };
-        const {_id} = payload;
+        const {_id} = payload._id;
         user.findById(_id).then(userData => {
             req.user = userData;
             next();

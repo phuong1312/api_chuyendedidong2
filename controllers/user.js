@@ -151,7 +151,7 @@ const userController = {
     // },
 
     createToken: (checkUser) => {
-        return jwt.sign({ _id: checkUser._id }, process.env.JWT_SECRET, { expiresIn: "13d" });
+        return jwt.sign({ _id: checkUser._id, role: checkUser.role }, process.env.JWT_SECRET, { expiresIn: "1d" });
     },
     //login user
     login: async (req, res) => {
@@ -173,13 +173,15 @@ const userController = {
                 bcrypt.compare(password, checkUser.password, (err, result) => {
                     if (result) {
                         const token = userController.createToken(checkUser);
+                        console.log(token);
                         res.cookie("token", token, {
                             httpOnly: true,
-                            secure: true,
+                            // secure: true,
+                            secure: false,
                             sameSite: "strict",
                         });
                         const { password, ...other } = checkUser._doc
-                        return res.status(200).json({ ...other });
+                        return res.status(200).json({ ...other , token});
                     } else {
                         return res.status(402).json({ error: "Wrong Password" });
                     }
@@ -188,11 +190,8 @@ const userController = {
                 return res.status(402).json(error);
             }
         }
-        // console.log(req.body);
-        // const user = req.body;
-        // userController.checkPass(user, req.body.password);
-        // return res.status(200).json({ msg: " Password" });
     },
+    
     //get list sort user 
     getSortIncreaseOnName: async (req, res) => {
         try {
@@ -243,8 +242,20 @@ const userController = {
     },
     //logout
     logout: async (req, res) => {
-        res.clearCookie("token");
-        return res.status(200).json({ msg: "logout is success" });
+        try {
+            res.clearCookie("token");
+            return res.status(200).json({ msg: "logout is success" });
+        } catch (error) {
+            return res.status(403).json({ err: error });
+        }
+    },
+    //check token
+    checkToken: async (req, res) => {
+        try {
+            return res.status(200).json({ msg: "token is success" });
+        } catch (error) {
+            return res.status(403).json({ err: error });
+        }
     }
 };
 
