@@ -252,7 +252,18 @@ const userController = {
     //check token
     checkToken: async (req, res) => {
         try {
-            return res.status(200).json({ msg: "token is success" });
+            if (!req.params.token) {
+                return res.status(401).send({ error: "You must be logged in, key not given" });
+            };
+            const token = req.params.token.replace("token ", "");
+            jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
+                if (err) {
+                    return res.status(401).send({ error: "You must be logged in, token invalid" });
+                } else {
+                    return res.status(200).json({ msg: "token is success" });
+                }
+            });
+           
         } catch (error) {
             return res.status(403).json({ err: error });
         }
