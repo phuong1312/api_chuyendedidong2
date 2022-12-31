@@ -3,7 +3,7 @@ const drinkController = require("../controllers/drink");
 const router = require("express").Router();
 
 router.post("/add", drinkController.addDrink);
-router.get("/search", drinkController.searchByName);
+router.get("/search/:key", drinkController.searchByName);
 router.get("/list", drinkController.getAllDrink);
 router.get("/sortIncrease", drinkController.getSortIncreaseOnPrice);
 router.get("/sortDecrease", drinkController.getSortDecreaseOnPrice);
