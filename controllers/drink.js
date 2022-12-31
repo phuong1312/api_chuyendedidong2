@@ -122,12 +122,14 @@ const drinkController = {
     }
   },
 
-  // $set: {
-  //   name: req.body.name,
-  //   price: req.body.price,
-  //   image: req.file.path,
-  //   category: req.body.category,
-  // },
+  searchByName: async (req, res) => {
+    try {
+      const search = await Drink.find({ name: { $regex: '.*' + req.params.key + '.*' } });
+      return res.status(200).json(search);
+    } catch (error) {
+      return res.status(403).json({ err: error });
+    }
+  },
   updateDrink: async (req, res) => {
     try {
       const drink = await Drink.findById(req.params.id);
