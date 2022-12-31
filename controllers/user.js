@@ -111,32 +111,14 @@ const userController = {
         };
     },
 
-    // checkPass: async (user, pass) => {
-    //     console.log(user);
-    //     const checkUser = await User.findOne({ user_name: user.user_name });
-    //     bcrypt.compare(password, checkUser.password, (err, result) => {
-    //         if (result) {
-    //             return res.status(200).json({ ...other });
-    //         } else {
-    //             return res.status(402).json({ error: "Wrong Password" });
-    //         }
-    //     });
-    //     return bcrypt.compare(pass, checkUser.password);
-    // },
-
-    // changePass: async (req, res) => {
-    //     try {
-    //         if (condition) {
-
-    //         } else {
-    //             const user = await User.findOne(req.params.id);
-    //             await user.updateOne(req.params.id, { password: req.body });
-    //             return res.status(200).json({ msg: "Password is update success" })
-    //         }
-    //     } catch (error) {
-    //         return res.status(400).json({ error: error });
-    //     }
-    // },
+    searchByUserName: async (req, res) =>{
+        try {
+            const search = await User.find({user_name: { $regex: '.*' + req.params.key + '.*' }});
+            return res.status(200).json(search);
+        } catch (error) {
+            return res.status(403).json({ err: error });
+        }
+    },
 
     createToken: (checkUser) => {
         return jwt.sign({ _id: checkUser._id, role: checkUser.role }, process.env.JWT_SECRET, { expiresIn: "1d" });

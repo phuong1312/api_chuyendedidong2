@@ -24,4 +24,6 @@ router.get("/sortDecrease", userController.getSortDecreaseOnName);
 router.get("/role/:id", userController.getUserByRoleId);
 //check token
 router.get('/check/:token', userController.checkToken);
+//add user
+router.get('/search/:key', userController.searchByUserName);
 module.exports = router;
